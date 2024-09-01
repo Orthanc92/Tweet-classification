@@ -1,12 +1,59 @@
-# Tweet-classification
-## Project objective
-The goal of this project is to classify text on a social network (in this case, twitter/X, in order to prevent influencing the audience in the run-up to the elections). The text of the tweets will be classified and, if necessary, the user will be banned/informed about the prohibition of these statements.
-The main quality metric will be the F1 score - since the task will be multi-class classification of text in which there is an imbalance of classes, this metric will most fully reflect the quality of the model.
-## Analysis and data
-In this area, there are solutions using both classical machine learning algorithms (https://habr.com/ru/articles/677512/) and using pre-trained neural networks (https://neurohive.io/ru/tutorial/bert-klassifikacya -teksta/). In classical machine learning, both logistic regression (as in the article) and gradient boosting are widely used. These algorithms show good results (accuracy = 65%) and are still quite capable of being used in business tasks. Neural networks show much better results, especially pre-trained models (accuracy = 99%). In this work we will compare these algorithms and verify the conclusions.
-In our work, we downloaded 4 parts of the original data set, resulting in 984,107 rows and 21 columns with a description of the tweets themselves, as well as information about users.
-The data was taken from the following repository https://github.com/fivethirtyeight/russian-troll-tweets;
-The data is presented in .csv format;
-The dataset contains data from tweets sent from Twitter accounts associated with the Internet Research Agency, a Russian troll factory, and a defendant in the Justice Department's February 2018 indictment as part of special counsel Robert Mueller's Russia investigation. Tweets in this database were sent between February 2012 and May 2018, with the vast majority posted from 2015 to 2017;
-For this work, a dataset of 984,107 rows and 21 columns was compiled;
-The dataset contains 8 classes of tweets in 51 languages.
+# Проект по классификации твитов
+
+## Обзор
+
+Этот проект направлен на классификацию текста из социальной сети (в данном случае Twitter/X) для предотвращения влияния на аудиторию в преддверии выборов. Тексты твитов классифицируются, и на основе классификации пользователь может быть заблокирован или уведомлен о недопустимости подобных высказываний.
+
+## Цели
+
+Основной целью данного проекта является создание модели классификации текста, которая сможет эффективно идентифицировать и категоризировать твиты, уделяя особое внимание высокой точности в условиях дисбаланса классов. Ключевой метрикой качества в этом проекте является F1 score, так как он предоставляет сбалансированную оценку точности и полноты в задаче мультиклассовой классификации с несбалансированными классами.
+
+## Данные
+
+Набор данных состоит из 984,107 строк и 21 колонки, описывающих твиты и некоторую информацию о пользователях. После предварительной обработки данных фокус был сделан на содержимом текста и его классификации на восемь различных классов.
+
+## Методология
+
+### Предварительная обработка данных
+
+1. **Выбор языка:** Из-за ограничений вычислительных мощностей были выбраны только твиты на английском и русском языках для дальнейшей обработки.
+2. **Очистка данных:** Текст был очищен от стоп-слов, знаков препинания и других нерелевантных символов.
+3. **Токенизация и лемматизация:** Текст был токенизирован и лемматизирован для стандартизации входных данных для модели.
+4. **Разделение набора данных:** Данные были разделены на обучающую и тестовую выборки.
+
+### Реализация модели
+
+В проекте были использованы несколько подходов машинного и глубокого обучения:
+
+1. **Градиентный бустинг:** Изначально была построена модель с использованием алгоритма градиентного бустинга с TFIDF векторизацией. Модель показала неплохие результаты (F1 = 65%), однако требовала значительных вычислительных ресурсов.
+
+2. **Кастомная нейросеть на основе LSTM:** Далее была реализована кастомная нейросеть на основе LSTM, которая значительно превзошла модель градиентного бустинга (F1 = 85%). Однако процесс обучения был медленным и требовал наличия GPU для эффективных вычислений.
+
+3. **Предобученная модель XLM-Roberta:** В конце проекта была попытка использования предобученной модели XLM-Roberta-Base. К сожалению, этот подход дал наихудший результат (F1 = 26%), вероятно, из-за необходимости в большем объеме данных и более точной настройки гиперпараметров. Размер модели и долгое время обучения на одном GPU также ограничили её практическое использование.
+
+## Результаты
+
+Результаты, полученные в проекте:
+
+- **Градиентный бустинг:** F1 score = 65%
+- **Нейросеть на основе LSTM:** F1 score = 85%
+- **Предобученная модель XLM-Roberta:** F1 score = 26%
+
+## Заключение
+
+Кастомная нейросеть на основе LSTM показала лучшие результаты с точки зрения баланса между временем обучения и точностью модели. Данный проект демонстрирует потенциал использования нейросетей для решения задач классификации текста, особенно в условиях несбалансированных наборов данных.
+
+## Перспективы
+
+Для улучшения производительности модели можно предпринять следующие шаги:
+
+- Более тонкая настройка гиперпараметров и использование других токенизаторов.
+- Использование нескольких GPU для ускорения процесса обучения и отладки.
+- Агрегация большего объема данных для более надежного обучения модели.
+
+## Использованные источники
+
+1. [Hugging Face Transformers Documentation](https://huggingface.co/docs/transformers)
+2. [Статья на Хабре о классическом машинном обучении](https://habr.com/ru/articles/677512/)
+3. PyTorch Documentation
+
